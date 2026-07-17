@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watan — dev-студия</title>
+<meta name="description" content="Watan — dev-студия из Дагестана. «Ватан» — родина. Веб-сервисы, SaaS и сайты — отсюда для всего мира.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;1,300&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;1,300&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,500;1,300&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"></noscript>
+<style>
+:root{
+  --paper:#F6F7F4; --land:#E8EDE2; --land2:#DDE5D4; --ink:#22352C; --mut:#5F7568; --hair:#C9D4C6;
+  --sea:#D5E6EC; --sea2:#BFDAE4; --river:#7FB3C6; --pin:#C75439; --gold:#B8933C; --grid:#A9BBAF;
+  --serif:'Spectral',Georgia,serif; --body:'Golos Text',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --pad:clamp(20px,4.5vw,76px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--ink);color:var(--paper)}
+:focus-visible{outline:2.5px solid var(--pin);outline-offset:3px;border-radius:3px}
+.mono-t{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
+
+/* ============ КАРТА — фон всей страницы ============ */
+.mapbg{position:fixed;inset:0;z-index:0;overflow:hidden;background:linear-gradient(120deg,var(--paper) 0%,#EFF2EC 100%)}
+.mapcam{position:absolute;top:50%;right:clamp(-160px,-6vw,0px);transform:translateY(-50%);height:118vh;aspect-ratio:1150/1550;
+  transition:transform 1.6s cubic-bezier(.3,.7,.25,1);will-change:transform}
+.mapcam svg{width:100%;height:100%}
+/* фокус камеры по секциям */
+.mapbg.f-all   .mapcam{transform:translateY(-50%) scale(1)}
+.mapbg.f-north .mapcam{transform:translateY(-50%) scale(1.55) translate(-4%,26%)}
+.mapbg.f-coast .mapcam{transform:translateY(-50%) scale(1.6) translate(-9%,2%)}
+.mapbg.f-mount .mapcam{transform:translateY(-50%) scale(1.65) translate(6%,-14%)}
+.mapbg.f-south .mapcam{transform:translateY(-50%) scale(1.55) translate(-8%,-33%)}
+@media(prefers-reduced-motion:reduce){.mapcam{transition:none}.mapbg .mapcam{transform:translateY(-50%) scale(1)!important}}
+@media(max-width:900px){
+  .mapcam{right:50%;transform:translate(50%,-50%);height:104vh;opacity:.45}
+  .mapbg.f-all .mapcam{transform:translate(50%,-50%) scale(1)}
+  .mapbg.f-north .mapcam{transform:translate(50%,-50%) scale(1.5) translate(0,26%)}
+  .mapbg.f-coast .mapcam{transform:translate(50%,-50%) scale(1.55) translate(-6%,2%)}
+  .mapbg.f-mount .mapcam{transform:translate(50%,-50%) scale(1.6) translate(5%,-14%)}
+  .mapbg.f-south .mapcam{transform:translate(50%,-50%) scale(1.5) translate(-5%,-33%)}
+}
+
+/* картографические элементы */
+.land{fill:var(--land);stroke:var(--ink);stroke-width:2.6;stroke-linejoin:round}
+.relief{fill:var(--land2);opacity:.8}
+.sea{fill:var(--sea)}
+.sea-deep{fill:var(--sea2);opacity:.6}
+.river{fill:none;stroke:var(--river);stroke-width:2;stroke-linecap:round;opacity:.85}
+.gridl{stroke:var(--grid);stroke-width:.8;opacity:.4}
+.gridt{font-family:var(--mono);font-size:15px;fill:var(--grid);letter-spacing:.1em}
+.sea-t{font-family:var(--serif);font-style:italic;font-size:30px;fill:#8FB4C4;letter-spacing:.34em}
+.reg-t{font-family:var(--mono);font-size:13px;fill:var(--mut);letter-spacing:.28em;opacity:.55}
+.peak{fill:none;stroke:var(--mut);stroke-width:1.6;opacity:.6}
+/* пины городов */
+.pin circle{fill:var(--pin);stroke:#fff;stroke-width:2}
+.pin text{font-family:var(--body);font-weight:600;font-size:17px;fill:var(--ink)}
+.pin .halo{fill:none;stroke:var(--pin);stroke-width:1.4;opacity:0}
+.pin{opacity:.35;transition:opacity .8s ease}
+.pin.on{opacity:1}
+.pin.on .halo{animation:halo 2.4s ease-out infinite}
+@keyframes halo{0%{opacity:.7;transform:scale(.4)}100%{opacity:0;transform:scale(1.9)}}
+.pin .halo{transform-origin:center;transform-box:fill-box}
+@media(prefers-reduced-motion:reduce){.pin.on .halo{animation:none}}
+/* маршрут-финал */
+.trip{fill:none;stroke:var(--pin);stroke-width:2.4;stroke-dasharray:7 8;opacity:0;transition:opacity 1s ease}
+.mapbg.f-fin .trip{opacity:.85}
+.mapbg.f-fin .pin{opacity:1}
+
+/* ============ NAV ============ */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:18px var(--pad);transition:.3s}
+nav.stuck{background:rgba(246,247,244,.88);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--hair)}
+.brand{font-family:var(--serif);font-weight:500;font-size:21px;letter-spacing:.01em}
+.brand b{color:var(--pin);font-weight:500}
+.navl{display:flex;gap:26px;align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.navl a{color:var(--mut)}
+.navl a:hover{color:var(--ink)}
+.navl .c{border:1.5px solid var(--ink);color:var(--ink);padding:8px 16px;border-radius:100px;transition:.25s}
+.navl .c:hover{background:var(--ink);color:var(--paper)}
+@media(max-width:720px){.navl a:not(.c){display:none}}
+
+/* ============ КОНТЕНТ ============ */
+main{position:relative;z-index:2;max-width:1360px;margin:0 auto;padding:0 var(--pad)}
+section{min-height:96svh;display:flex;flex-direction:column;justify-content:center;padding:100px 0 70px;max-width:600px}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+.plate{background:rgba(255,255,255,.72);backdrop-filter:blur(10px);border:1px solid rgba(34,53,44,.1);
+  border-radius:18px;padding:clamp(28px,4vw,46px);box-shadow:0 24px 60px -30px rgba(34,53,44,.25)}
+.geo{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.geo i{width:9px;height:9px;border-radius:50%;background:var(--pin);flex:none}
+h1{font-family:var(--serif);font-weight:300;font-size:clamp(42px,7vw,84px);line-height:1;letter-spacing:-.02em}
+h1 em,h2 em{font-style:italic;color:var(--pin)}
+h2{font-family:var(--serif);font-weight:300;font-size:clamp(30px,4.4vw,52px);line-height:1.04;letter-spacing:-.015em;margin-bottom:14px}
+.lead{color:var(--mut);font-size:clamp(15.5px,1.7vw,17.5px);max-width:48ch;margin-top:16px}
+.lead b{color:var(--ink);font-weight:600}
+.acts{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-block;padding:14px 28px;border-radius:100px;font-weight:600;font-size:15px;transition:.22s}
+.btn-p{background:var(--ink);color:var(--paper)}
+.btn-p:hover{background:var(--pin);transform:translateY(-2px)}
+.btn-g{border:1.5px solid var(--hair);color:var(--ink)}
+.btn-g:hover{border-color:var(--pin);color:var(--pin)}
+
+/* услуги — гербарий списком */
+.svc{margin-top:22px;border-top:1px solid var(--hair)}
+.svc .it{padding:20px 0;border-bottom:1px solid var(--hair)}
+.svc .it h3{font-family:var(--serif);font-weight:500;font-size:clamp(19px,2.2vw,24px)}
+.svc .it p{color:var(--mut);font-size:14px;max-width:52ch;margin-top:4px}
+.svc .it .m{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--gold);margin-top:8px;display:block;text-transform:uppercase}
+/* процесс — серпантин */
+.serp{margin-top:20px;position:relative;padding-left:26px}
+.serp::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:0;border-left:2px dashed var(--hair)}
+.serp .st{position:relative;padding-bottom:26px}
+.serp .st:last-child{padding-bottom:0}
+.serp .st::before{content:"";position:absolute;left:-24px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2.5px solid var(--pin)}
+.serp h3{font-family:var(--serif);font-weight:500;font-size:19px}
+.serp p{color:var(--mut);font-size:14px;max-width:48ch}
+.serp .d{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+/* принципы — Дербент, надолго */
+.old{margin-top:18px}
+.old .pr{padding:16px 0;border-bottom:1px solid var(--hair)}
+.old .pr p{font-family:var(--serif);font-weight:500;font-size:clamp(18px,2vw,22px)}
+.old .pr span{color:var(--mut);font-size:14px}
+
+footer{position:relative;z-index:2;padding:26px var(--pad) 60px}
+.f-in{max-width:1360px;margin:0 auto;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  border-top:1px solid var(--hair);padding-top:20px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+.f-in a:hover{color:var(--pin)}
+</style>
+</head>
+<body>
+
+<!-- ============ карта Дагестана: фон всей страницы ============ -->
+<div class="mapbg f-all" id="mapbg" aria-hidden="true">
+  <div class="mapcam">
+    <svg viewBox="0 0 1150 1550" preserveAspectRatio="xMidYMid meet">
+      <!-- Каспий -->
+      <rect class="sea" x="430" y="0" width="720" height="1550"/>
+      <path class="sea-deep" d="M860 120 Q 1050 500 950 900 Q 900 1250 1120 1500 L1150 1520 1150 90 Z"/>
+      <text class="sea-t" x="985" y="520" transform="rotate(76 985 520)">КАСПИЙСКОЕ МОРЕ</text>
+      <!-- соседи -->
+      <path fill="#EDEFE8" d="M1080.0 1272.5 960.0 1365.7 858.0 1527.7 1142.7 1541.8 1142.7 1272.5 Z"/>
+      <text class="reg-t" x="880" y="1420">АЗЕРБАЙДЖАН</text>
+      <text class="reg-t" x="70" y="1210" transform="rotate(-38 70 1210)">ГРУЗИЯ</text>
+      <text class="reg-t" x="30" y="700" transform="rotate(90 30 700)">ЧЕЧНЯ</text>
+      <text class="reg-t" x="120" y="30">КАЛМЫКИЯ</text>
+      <!-- координатная сетка -->
+      <line class="gridl" x1="300" y1="0" x2="300" y2="1550"/><text class="gridt" x="308" y="1535">46°в.д.</text>
+      <line class="gridl" x1="600" y1="0" x2="600" y2="1550"/><text class="gridt" x="608" y="1535">47°</text>
+      <line class="gridl" x1="900" y1="0" x2="900" y2="1550"/><text class="gridt" x="908" y="1535">48°</text>
+      <line class="gridl" x1="0" y1="402" x2="1150" y2="402"/><text class="gridt" x="8" y="395">44°с.ш.</text>
+      <line class="gridl" x1="0" y1="807" x2="1150" y2="807"/><text class="gridt" x="8" y="800">43°</text>
+      <line class="gridl" x1="0" y1="1212" x2="1150" y2="1212"/><text class="gridt" x="8" y="1205">42°</text>
+      <!-- Дагестан: граница OSM, миллиметр в миллиметр -->
+      <path class="land" d="M835.0 1541.8 843.2 1528.0 863.6 1528.7 870.1 1522.3 873.5 1513.4 871.7 1508.8 872.9 1504.1 867.1 1500.2 867.9 1498.6 869.7 1495.5 890.7 1486.8 885.1 1474.4 888.9 1470.7 893.2 1473.7 897.4 1472.7 901.7 1462.8 899.2 1460.6 901.9 1453.4 900.8 1449.0 902.3 1444.8 919.1 1431.5 916.3 1427.6 919.4 1417.4 935.9 1414.5 941.4 1411.0 967.3 1407.4 975.7 1402.8 977.9 1397.5 985.3 1389.6 994.3 1388.3 1013.2 1377.4 1023.8 1364.4 1026.1 1353.3 1031.1 1345.3 1042.5 1331.5 1047.3 1322.0 1066.4 1300.6 1066.8 1292.4 1069.9 1291.6 1073.8 1286.0 1073.0 1282.9 1075.8 1277.2 1142.7 1227.4 1123.5 1215.1 1105.5 1191.0 1067.2 1154.6 1055.7 1126.0 1031.7 1093.7 1001.3 1038.8 966.4 1000.3 959.3 989.5 952.2 976.2 944.9 952.8 936.0 934.7 923.3 918.8 895.2 874.9 889.6 841.4 880.9 820.9 871.2 806.9 843.9 782.2 833.2 751.0 844.7 726.9 849.6 695.2 849.4 677.3 838.1 611.9 848.7 585.4 853.5 549.3 879.9 501.5 922.8 461.2 935.5 441.9 940.7 427.5 943.0 412.3 942.3 397.1 938.7 382.2 931.4 366.3 922.6 353.9 898.6 335.0 874.3 326.4 809.5 321.0 799.1 316.6 831.9 283.2 841.9 269.7 850.5 249.2 853.0 232.4 850.8 205.9 840.1 170.8 826.7 151.5 807.2 135.2 776.9 122.7 742.7 120.9 720.6 126.4 693.2 142.4 649.4 156.6 646.0 141.2 671.8 126.4 688.1 110.6 612.3 98.4 610.2 99.2 610.9 101.4 603.7 101.4 598.2 104.5 593.0 101.5 580.2 104.1 579.9 81.2 569.5 72.9 559.5 78.0 546.9 74.3 542.7 75.6 542.8 79.4 547.6 81.6 546.7 85.4 551.4 90.2 546.2 93.8 539.6 84.3 526.6 77.8 531.8 69.9 530.9 67.1 507.0 58.9 503.1 53.9 490.5 53.0 475.5 41.4 471.2 34.3 451.4 23.4 445.4 25.0 434.8 21.4 428.1 23.3 415.0 18.1 407.6 20.7 404.2 16.6 397.8 17.1 367.8 7.7 360.1 13.6 348.4 11.7 347.9 13.6 335.2 9.0 323.0 11.0 309.6 4.6 294.7 1.2 290.8 4.6 284.7 2.3 253.8 2.5 244.1 0.1 238.1 1.8 239.2 6.1 235.0 9.5 211.5 5.9 184.0 47.8 197.0 78.7 156.6 126.6 123.7 161.1 115.3 156.0 104.3 157.8 102.8 161.4 78.2 163.1 71.0 176.7 80.0 193.4 78.6 198.3 68.2 196.3 67.6 212.6 105.6 214.7 110.3 218.6 115.7 219.3 118.5 226.0 128.5 229.6 127.8 242.2 111.5 284.3 65.3 292.1 65.1 294.9 41.0 299.0 31.0 324.4 150.9 330.6 150.8 349.3 147.0 349.3 146.7 397.7 156.4 397.8 213.8 416.9 215.9 420.9 238.7 421.1 238.8 413.7 258.0 413.5 266.5 421.8 321.6 430.0 317.8 448.2 310.6 447.3 301.1 449.8 313.4 474.5 324.1 476.1 324.0 465.6 328.6 466.4 328.7 458.2 365.5 458.6 375.1 449.8 375.3 423.7 408.1 424.3 402.9 413.1 404.0 409.8 402.1 407.7 403.7 406.8 400.9 402.5 397.6 401.8 396.4 397.5 432.2 400.6 428.4 406.9 432.2 411.0 430.1 413.3 433.5 415.3 430.4 416.2 429.8 420.6 432.4 419.7 436.5 423.3 436.3 427.1 438.7 430.2 434.8 434.5 434.8 444.6 436.5 447.2 434.4 451.7 448.5 451.0 447.9 455.4 449.7 457.6 448.4 459.0 461.7 459.1 471.2 453.0 476.9 453.5 481.5 463.4 485.0 462.5 485.8 470.6 494.4 470.4 498.2 467.9 498.8 472.1 494.4 476.2 496.6 485.6 489.1 495.1 476.1 495.7 467.3 498.9 455.3 521.4 445.5 528.2 443.2 533.8 437.5 538.0 434.8 546.2 436.8 551.2 433.0 556.6 428.8 557.4 429.7 561.9 424.5 565.9 429.8 572.3 427.9 582.3 431.1 589.0 424.7 593.9 422.8 603.3 415.5 605.9 416.4 612.9 406.6 617.0 398.3 624.5 400.6 644.6 406.3 651.7 411.0 668.5 418.8 670.8 422.9 675.5 424.3 683.7 427.3 685.7 426.7 694.7 422.8 703.0 422.9 712.8 417.5 725.1 427.5 725.6 426.8 729.6 431.7 731.5 416.6 747.7 419.6 754.7 426.8 758.3 426.2 763.9 430.6 772.7 447.4 770.0 451.9 772.5 450.3 777.8 455.7 780.5 457.3 790.9 447.5 790.8 447.6 792.4 449.3 796.9 451.9 793.7 456.3 795.1 456.6 797.4 452.1 796.0 451.9 800.6 447.9 798.8 441.0 800.9 449.2 817.1 448.6 828.7 459.7 838.8 447.3 842.5 431.5 852.8 431.4 855.0 434.5 856.3 428.7 864.3 418.3 865.9 410.1 871.2 411.3 862.8 401.5 850.3 392.7 843.3 393.0 854.5 390.1 861.6 383.5 853.5 380.2 854.9 378.0 860.1 371.7 863.4 367.4 860.8 362.4 851.4 356.2 852.8 356.1 858.6 342.1 874.1 335.1 886.6 343.5 890.3 346.2 898.1 349.8 900.1 349.2 905.3 350.5 905.4 348.2 909.3 353.3 911.0 352.2 915.3 339.3 919.7 329.9 918.3 328.5 924.0 322.5 921.0 325.6 931.1 322.4 935.9 304.1 938.5 305.1 941.8 302.8 945.4 302.8 952.9 309.2 960.1 302.3 965.1 301.6 970.3 289.9 977.5 277.7 967.7 274.7 973.0 268.3 976.5 272.2 987.4 264.5 994.5 258.0 995.4 252.7 1000.0 251.1 1004.7 246.7 1006.8 246.3 1009.8 232.5 1014.0 232.0 1025.3 234.4 1030.8 232.4 1038.2 220.4 1058.5 223.2 1064.9 222.8 1076.7 227.2 1079.7 226.1 1086.5 221.9 1092.7 216.6 1094.7 210.7 1091.7 206.3 1096.5 200.9 1097.2 195.6 1093.4 185.5 1109.6 186.7 1113.0 182.5 1117.6 182.3 1125.3 186.8 1127.0 194.8 1136.6 201.6 1136.7 215.9 1144.8 217.7 1149.5 224.4 1152.1 221.7 1158.5 230.7 1160.4 230.8 1164.4 235.8 1170.4 241.1 1164.5 246.9 1168.8 256.2 1164.8 263.6 1169.6 269.4 1168.8 274.0 1173.1 276.4 1179.0 273.6 1185.6 279.1 1189.7 280.3 1194.0 278.4 1199.0 283.1 1197.3 283.1 1199.7 287.3 1202.0 296.2 1193.4 301.4 1196.8 306.2 1194.9 307.0 1201.1 312.1 1203.7 321.9 1195.3 325.1 1200.3 325.8 1209.6 331.9 1217.4 339.9 1208.6 344.2 1207.4 345.2 1213.8 347.8 1215.7 365.6 1208.0 366.5 1205.5 371.1 1205.3 377.5 1212.8 374.9 1214.1 373.1 1220.3 381.1 1218.7 379.8 1222.9 383.6 1227.5 384.7 1233.9 396.0 1240.4 401.7 1233.6 407.7 1238.9 419.9 1236.0 421.3 1243.9 426.4 1243.7 427.9 1247.0 426.6 1252.4 432.4 1261.0 432.9 1266.9 439.1 1266.2 442.8 1260.5 452.6 1256.4 460.8 1259.9 461.5 1263.7 465.5 1265.6 466.2 1268.3 466.4 1283.6 475.3 1291.7 484.0 1285.8 487.4 1278.9 494.1 1281.2 507.5 1278.4 513.0 1281.8 516.5 1281.3 514.9 1273.5 528.1 1267.4 529.6 1276.4 535.3 1286.2 530.9 1288.9 529.7 1292.4 537.7 1301.2 537.2 1303.4 542.1 1308.2 549.1 1308.4 549.3 1313.4 555.8 1318.3 559.5 1325.0 569.7 1320.0 574.1 1322.5 578.6 1329.0 576.3 1339.1 578.2 1342.7 581.8 1342.2 587.1 1351.7 599.8 1357.2 603.7 1362.6 597.2 1373.8 601.0 1381.2 606.7 1383.0 605.6 1391.6 610.1 1388.0 611.7 1390.8 619.9 1392.1 622.0 1390.3 620.4 1385.1 634.0 1375.7 633.0 1383.8 638.7 1393.7 651.5 1403.3 650.4 1408.2 647.1 1411.7 647.7 1414.9 652.0 1415.7 654.4 1419.7 657.8 1418.9 659.5 1424.8 657.9 1426.1 663.4 1434.4 672.6 1436.0 666.7 1446.4 668.6 1451.3 665.6 1454.7 677.8 1456.6 681.3 1473.5 677.4 1479.3 681.1 1483.8 686.8 1485.1 690.1 1492.1 722.5 1510.5 722.8 1508.6 729.9 1509.0 736.1 1505.8 741.9 1513.3 744.2 1509.8 749.5 1508.0 751.8 1511.0 752.3 1516.9 751.0 1524.3 767.3 1536.6 769.4 1536.5 770.3 1531.3 773.1 1528.8 783.1 1528.9 786.0 1520.2 795.3 1526.4 810.3 1525.2 813.5 1532.2 817.8 1533.0 818.3 1538.8 Z"/>
+      <!-- реки -->
+      <path class="river" d="M30.0 490.9 L240.0 515.2 L450.0 563.8 L630.0 555.7 L735.0 584.0"/>
+      <path class="river" d="M549.0 887.8 L585.0 806.8 L654.0 758.2 L744.0 697.4"/>
+      <path class="river" d="M780.0 1390.0 L900.0 1333.3 L1005.0 1292.8 L1065.0 1276.6"/>
+      <!-- вершины -->
+      <path class="peak" d="M420 1050l16-26 16 26M470 1030l13-20 13 20M560 1130l16-26 16 26M640 1230l12-19 12 19M760 1340l15-24 15 24M830 1440l14-22 14 22"/>
+      <text class="reg-t" x="330" y="1160" transform="rotate(-40 330 1160)">БОЛЬШОЙ КАВКАЗ</text>
+      <text class="reg-t" x="330" y="230">НОГАЙСКАЯ СТЕПЬ</text>
+      <!-- маршрут (финал) -->
+      <path class="trip" d="M516.0 462.5 Q 691.5 653.6 751.5 813.6 Q 549.5 995.0 589.5 1055.0 Q 867.0 1158.3 987.0 1188.3"/>
+      <!-- города -->
+            <g class="pin" data-r="north"><circle class="halo" cx="516.0" cy="462.5" r="16"/><circle cx="516.0" cy="462.5" r="6"/><text x="532.0" y="456.5">Кизляр</text></g>
+      <g class="pin" data-r="north"><circle class="halo" cx="476.4" cy="707.1" r="16"/><circle cx="476.4" cy="707.1" r="6"/><text x="298.4" y="693.1">Хасавюрт</text></g>
+      <g class="pin" data-r="coast"><circle class="halo" cx="751.5" cy="813.6" r="16"/><circle cx="751.5" cy="813.6" r="7"/><text x="553.5" y="801.6">Махачкала</text></g>
+      <g class="pin" data-r="mount"><circle class="halo" cx="589.5" cy="1055.0" r="16"/><circle cx="589.5" cy="1055.0" r="6"/><text x="481.5" y="1095.0">Гуниб</text></g>
+      <g class="pin" data-r="south"><circle class="halo" cx="987.0" cy="1188.3" r="16"/><circle cx="987.0" cy="1188.3" r="6"/><text x="829.0" y="1174.3">Дербент</text></g>
+      <g class="pin" data-r="south"><circle class="halo" cx="856.8" cy="1527.7" r="16"/><circle cx="856.8" cy="1527.7" r="5"/><text x="626.8" y="1553.7">г. Базардюзю</text></g>
+      <!-- компас -->
+      <g transform="translate(90,1400)">
+        <circle r="30" fill="none" stroke="#5F7568" stroke-width="1.2" opacity=".6"/>
+        <path d="M0 -26 L7 8 0 2 -7 8 Z" fill="#C75439"/>
+        <text y="-38" text-anchor="middle" class="gridt" style="fill:#5F7568">С</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<nav id="nav">
+  <a class="brand" href="#top">wat<b>a</b>n</a>
+  <div class="navl">
+    <a href="#svc">услуги</a>
+    <a href="#proc">процесс</a>
+    <a class="c" href="#cta">обсудить проект</a>
+  </div>
+</nav>
+
+<main id="top">
+
+  <section data-focus="f-all" data-pins="">
+    <div class="plate">
+      <p class="mono-t geo reveal in"><i></i>dev-студия · 42°58′ с.ш. 47°30′ в.д.</p>
+      <h1 class="reveal in">Здесь наш <em>ватан</em></h1>
+      <p class="lead reveal in">«Ватан» — родина почти на всех языках Дагестана. Строим веб-сервисы, SaaS и сайты — отсюда, для заказчиков откуда угодно. <b>Листайте — проедем всю республику.</b></p>
+      <div class="acts reveal in">
+        <a class="btn btn-p" href="#cta">Обсудить проект →</a>
+        <a class="btn btn-g" href="#svc">Смотреть маршрут</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="north" data-focus="f-north" data-pins="north">
+    <div class="plate">
+      <p class="mono-t geo reveal"><i></i>ногайская степь · здесь всё быстро и по прямой</p>
+      <h2 class="reveal">Работаем <em>без петляний</em></h2>
+      <p class="lead reveal">Прямые ответы, прямые сроки, прямая связь с тем, кто пишет код. Никаких менеджеров-посредников между вами и результатом. Смета — письменно, до старта.</p>
+    </div>
+  </section>
+
+  <section id="svc" data-focus="f-coast" data-pins="coast">
+    <div class="plate">
+      <p class="mono-t geo reveal"><i></i>побережье · Махачкала · порт заказов</p>
+      <h2 class="reveal">Что можно <em>заказать</em></h2>
+      <div class="svc reveal">
+        <div class="it"><h3>Веб-сервисы и SaaS</h3><p>Платформы, кабинеты, дашборды, биллинг, интеграции. Архитектура с запасом на рост.</p><span class="m">Go · TypeScript · PostgreSQL · от 4 недель</span></div>
+        <div class="it"><h3>Сайты и лендинги</h3><p>Быстрые, находимые в поиске, ваши навсегда — без аренды конструктора.</p><span class="m">Next.js · SEO · от 2 недель</span></div>
+        <div class="it"><h3>API и интеграции</h3><p>Оплаты, CRM, 1С, мессенджеры — стабильно и документированно.</p><span class="m">REST · gRPC · вебхуки</span></div>
+        <div class="it"><h3>Поддержка и развитие</h3><p>Чужой код чиним, ускоряем и ведём дальше.</p><span class="m">мониторинг · релизы · 24/7</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proc" data-focus="f-mount" data-pins="mount">
+    <div class="plate">
+      <p class="mono-t geo reveal"><i></i>горы · Гуниб · наверх — только серпантином</p>
+      <h2 class="reveal">Как идёт <em>работа</em></h2>
+      <div class="serp reveal">
+        <div class="st"><h3>Разбор задачи</h3><p>Созвон, цель, ограничения. Объём, срок и цена — письменно.</p><span class="d">2–4 дня</span></div>
+        <div class="st"><h3>Прототип</h3><p>Видите продукт до того, как в него вложены недели разработки.</p><span class="d">~1 неделя</span></div>
+        <div class="st"><h3>Сборка спринтами</h3><p>Каждую неделю — рабочая версия с доступом. Правки по ходу.</p><span class="d">от 3 недель</span></div>
+        <div class="st"><h3>Релиз и поддержка</h3><p>Продакшен, мониторинг, документация. Не пропадаем.</p><span class="d">и далее</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-focus="f-south" data-pins="south">
+    <div class="plate">
+      <p class="mono-t geo reveal"><i></i>юг · Дербент · городу 2000 лет — вот это аптайм</p>
+      <h2 class="reveal">Строим <em>надолго</em></h2>
+      <div class="old reveal">
+        <div class="pr"><p>Код принадлежит вам</p><span>Репозиторий, доступы и документация — ваши с первого дня.</span></div>
+        <div class="pr"><p>Смета не плывёт</p><span>Меняется задача — меняем договор открыто, не счётом задним числом.</span></div>
+        <div class="pr"><p>Гость — это святое</p><span>Каждый заказчик — гость студии: быстро отвечаем, понятно объясняем, доводим до конца.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta" data-focus="f-all f-fin" data-pins="all">
+    <div class="plate">
+      <p class="mono-t geo reveal"><i></i>маршрут пройден · вся республика на карте</p>
+      <h2 class="reveal">Теперь — <em>ваша точка.</em></h2>
+      <p class="lead reveal">Опишите задачу своими словами — разберём, оценим и ответим в течение дня. Первая консультация бесплатно. Где бы вы ни были — наш ватан на связи.</p>
+      <div class="acts reveal">
+        <a class="btn btn-p" href="https://t.me/watandev" rel="noopener">t.me/watandev →</a>
+        <a class="btn btn-g" href="mailto:hello@watan.dev">hello@watan.dev</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="f-in">
+    <span>© 2026 watan · dev-студия</span>
+    <span>ватӏан · ватӏа · ватан — на всех языках это «родина»</span>
+    <a href="https://t.me/watandev" rel="noopener">telegram</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var nav=document.getElementById('nav');
+  addEventListener('scroll',function(){nav.classList.toggle('stuck',scrollY>16)},{passive:true});
+
+  var mapbg=document.getElementById('mapbg');
+  var pins=document.querySelectorAll('.pin');
+  var FOCI=['f-all','f-north','f-coast','f-mount','f-south','f-fin'];
+
+  function setFocus(fs,pr){
+    FOCI.forEach(function(c){mapbg.classList.remove(c)});
+    fs.split(' ').forEach(function(c){if(c)mapbg.classList.add(c)});
+    pins.forEach(function(p){
+      var on = pr==='all' || (pr && p.dataset.r===pr);
+      p.classList.toggle('on',on);
+    });
+  }
+
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      setFocus(e.target.dataset.focus||'f-all', e.target.dataset.pins);
+    });
+  },{threshold:.55});
+  document.querySelectorAll('section[data-focus]').forEach(function(s){io.observe(s)});
+
+  var rio=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');rio.unobserve(e.target)}});
+  },{threshold:.13,rootMargin:'0px 0px -7% 0px'});
+  document.querySelectorAll('.reveal:not(.in)').forEach(function(el){rio.observe(el)});
+})();
+</script>
+</body>
+</html>

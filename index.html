@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dev-студия — 6 концепций бренда</title>
+<meta name="description" content="Шесть визуальных концепций бренда для dev-студии.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<style>
+:root{
+  --bg:#0A0B0D;--panel:#111318;--line:#20242B;--line2:#2E343D;
+  --text:#E9ECEF;--mut:#868F99;--dim:#565E68;--accent:#6E8BFF;
+  --disp:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  --pad:clamp(20px,5vw,80px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--disp);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:var(--pad)}
+.mono{font-family:var(--mono)}
+header{padding:90px 0 50px}
+.ey{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(32px,6vw,68px);font-weight:700;letter-spacing:-.03em;line-height:1.02;margin:18px 0 20px;max-width:18ch}
+.intro{color:var(--mut);max-width:60ch;font-size:17px}
+.intro b{color:var(--text);font-weight:500}
+.note{margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--dim);border-left:2px solid var(--line2);padding-left:14px;max-width:64ch;line-height:1.7}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;padding:20px 0 90px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
+.card{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  background:var(--panel);transition:.35s;display:flex;flex-direction:column;min-height:280px}
+.card:hover{border-color:var(--line2);transform:translateY(-4px)}
+.swatch{height:130px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:18px}
+.swatch .nm{font-weight:700;font-size:26px;letter-spacing:-.02em;position:relative;z-index:2}
+.card .body{padding:22px 22px 24px;flex:1;display:flex;flex-direction:column;gap:12px}
+.card .dna{color:var(--mut);font-size:14.5px;line-height:1.55}
+.card .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.chip{font-family:var(--mono);font-size:11px;color:var(--mut);border:1px solid var(--line2);border-radius:5px;padding:4px 8px}
+.card .go{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;color:var(--accent);margin-top:6px}
+.card:hover .go{gap:12px}
+
+/* per-brand swatches — mini identity previews */
+.s-ledev{background:#0B0E11;font-family:var(--mono)}
+.s-ledev .nm{color:#D7E0E6;font-family:var(--mono);font-size:20px;font-weight:500}.s-ledev .nm b{color:#37B0FF}
+.s-ledev .nm::before{content:"$ ";color:#3ADB8A}
+.s-skydream{background:linear-gradient(180deg,#241B3A 0%,#4A2E52 45%,#8A4A4A 75%,#C97B4E 100%)}
+.s-skydream .nm{font-family:Georgia,serif;font-weight:400;font-style:italic;color:#F5D9A8}
+.s-svod{background:#fcfcfa}.s-svod .nm{color:#101012}.s-svod .nm b{color:#1f3bff}
+.s-assadev{background:#E8E3D9}
+.s-assadev .nm{background:#171214;color:#E8E3D9;padding:2px 12px;transform:rotate(-3deg);text-transform:uppercase}
+.s-assadev .nm b{color:#F23557}
+.s-granit{background:linear-gradient(160deg,#212428,#111214)}.s-granit .nm{color:transparent;background:linear-gradient(180deg,#F0F1F3 30%,#A9AEB4);-webkit-background-clip:text;background-clip:text;text-transform:uppercase;letter-spacing:.14em}
+.s-caspian{background:#F4F6F3;background-image:linear-gradient(rgba(29,84,104,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(29,84,104,.07) 1px,transparent 1px);background-size:26px 26px}
+.s-caspian .nm{color:#12333E}
+.s-kanat{background:#E7ECEE;position:relative}
+.s-kanat::after{content:"";position:absolute;left:0;right:0;top:58%;height:2px;background:#8A5A2B}
+.s-kanat .nm{font-family:Georgia,serif;color:#1B2429;position:relative;z-index:2}.s-kanat .nm b{color:#CE3A24}
+.s-kb05{background:#153E66;background-image:linear-gradient(rgba(224,236,248,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(224,236,248,.09) 1px,transparent 1px);background-size:22px 22px}
+.s-kb05 .nm{color:#E4EEF8;border:1.5px solid rgba(224,236,248,.7);padding:4px 14px;font-size:20px;letter-spacing:.08em}.s-kb05 .nm b{color:#FFC94A}
+.s-usta{background:#131110}
+.s-usta .nm{font-family:Georgia,serif;color:#D9D4C9;letter-spacing:.14em;text-transform:uppercase}.s-usta .nm b{color:#E0BC72}
+.s-watan{background:#F6F7F4;position:relative;overflow:hidden}
+.s-watan::before{content:"";position:absolute;right:10px;top:6px;width:64px;height:112px;
+  background:#E8EDE2;border:2px solid #22352C;border-radius:46% 40% 30% 58%/34% 52% 30% 44%;
+  transform:rotate(8deg)}
+.s-watan::after{content:"";position:absolute;right:30px;top:44px;width:9px;height:9px;border-radius:50%;background:#C75439;border:2px solid #fff}
+.s-watan .nm{font-family:Georgia,serif;font-weight:400;color:#22352C}.s-watan .nm b{color:#C75439}
+
+footer{border-top:1px solid var(--line);padding:34px 0 60px;font-family:var(--mono);font-size:12px;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="ey">// выбор бренда · 10 концепций</span>
+    <h1>Десять визуальных ДНК для одной dev-студии</h1>
+    <p class="intro">Один и тот же бизнес — <b>веб-сервисы, SaaS и сайты на заказ</b> — в шести характерах. Каждый лендинг собран отдельно, со своей типографикой, палитрой и мотивом. Откройте, полистайте, выберите направление.</p>
+    <p class="note">Все копии — заглушки под правку. Контакты, домены и цифры (аптайм, сроки) — примеры, поставьте свои. RU-версия, дескриптор «dev-студия».</p>
+  </header>
+
+  <div class="grid">
+    <a class="card" href="ledev/index.html">
+      <div class="swatch s-ledev"><span class="nm">le<b>dev</b></span></div>
+      <div class="body">
+        <p class="dna">Страница = терминальная сессия. Команды печатаются, услуги — вывод `ls`, «почему мы» — git diff, tmux-бар внизу. «Я ле» — пасхалка. Warp-вайб.</p>
+        <div class="meta"><span class="chip">JetBrains Mono</span><span class="chip">terminal-session</span><span class="chip">typewriter</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="skydream/index.html">
+      <div class="swatch s-skydream"><span class="nm">Skydream</span></div>
+      <div class="body">
+        <p class="dna">Подъём по высоте: 0 м → облака → стратосфера → орбита. Полноэкранные главы, альтиметр-рейка, небо меняет цвет со скроллом. Кинематограф.</p>
+        <div class="meta"><span class="chip">Fraunces</span><span class="chip">altitude-story</span><span class="chip">альтиметр</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="svod/index.html">
+      <div class="swatch s-svod"><span class="nm">svod<b>.</b></span></div>
+      <div class="body">
+        <p class="dna">Страница = нормативный документ: титульный лист, оглавление с отточиями, услуги — параграфы §1.1–1.4, штампы «обязательно», гарантии — приложение А, CTA — форма заявки №1. Швейцарская типографика осталась.</p>
+        <div class="meta"><span class="chip">Inter Tight</span><span class="chip">свод-документ</span><span class="chip">klein blue</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="assadev/index.html">
+      <div class="swatch s-assadev"><span class="nm">assadev</span></div>
+      <div class="body">
+        <p class="dna">Зин / плакатная стена: повёрнутые обрывки на скотче, штампы, сет-лист вместо процесса, CTA — билет на концерт. Ноль карточек, чистый коллаж.</p>
+        <div class="meta"><span class="chip">Unbounded</span><span class="chip">zine-collage</span><span class="chip">скотч+штампы</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="granit/index.html">
+      <div class="swatch s-granit"><span class="nm">GRA<b>N</b>IT</span></div>
+      <div class="body">
+        <p class="dna">Архитектурный фасад: высеченная стела, услуги — четыре колонны с вертикальным текстом под архитравом, процесс — кладка снизу вверх, CTA — закладной камень.</p>
+        <div class="meta"><span class="chip">Sora</span><span class="chip">колоннада</span><span class="chip">гравировка</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="caspian/index.html">
+      <div class="swatch s-caspian"><span class="nm">Caspian</span></div>
+      <div class="body">
+        <p class="dna">Морская навигационная карта (светлая!): координатная сетка, роза ветров, услуги — порты захода с реальными координатами Каспия, процесс — судовой журнал, CTA — радиограмма.</p>
+        <div class="meta"><span class="chip">Manrope</span><span class="chip">nautical-chart</span><span class="chip">42°58′N</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="kanat/index.html">
+      <div class="swatch s-kanat"><span class="nm">kan<b>a</b>t</span></div>
+      <div class="body">
+        <p class="dna">Канатоходцы Цовкра-1: фигурка идёт по канату вверху страницы при скролле, канат-ось через весь лендинг, услуги — номера программы по обе стороны, весы «быстро/надёжно», процесс — следы шагов.</p>
+        <div class="meta"><span class="chip">Yeseva One</span><span class="chip">tightrope</span><span class="chip">баланс</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="kb05/index.html">
+      <div class="swatch s-kb05"><span class="nm">КБ<b>—05</b></span></div>
+      <div class="body">
+        <p class="dna">Конструкторское бюро, «05» = код Дагестана. Чертёж-синька: миллиметровка, рамка, размерные линии вокруг заголовка, услуги — спецификация, процесс — маршрутная карта Оп.005–020, футер — штамп по ГОСТ.</p>
+        <div class="meta"><span class="chip">Russo One</span><span class="chip">blueprint</span><span class="chip">ГОСТ-штамп</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="usta/index.html">
+      <div class="swatch s-usta"><span class="nm">Ust<b>a</b></span></div>
+      <div class="body">
+        <p class="dna">Кубачинские златокузнецы: чернёное серебро + золото, вращающееся клеймо мастера «проба 925», услуги — прейскурант с отточиями, процесс — эскиз→форма→гравировка→чернение, орнамент рисует сам себя.</p>
+        <div class="meta"><span class="chip">Cormorant</span><span class="chip">craft-atelier</span><span class="chip">клеймо 925</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+
+    <a class="card" href="watan/index.html">
+      <div class="swatch s-watan"><span class="nm">wat<b>a</b>n</span></div>
+      <div class="body">
+        <p class="dna">Реальная карта Дагестана (граница из OSM GeoJSON, 510 точек) фоном всей страницы: Каспий, реки, сетка координат. Скролл ведёт камеру по республике — степь → Махачкала → Гуниб → Дербент, пины оживают, в финале прорисовывается маршрут. «Ватан» = родина.</p>
+        <div class="meta"><span class="chip">Spectral</span><span class="chip">map-journey</span><span class="chip">камера-скролл</span></div>
+        <span class="go">Открыть →</span>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    <span>© 2026 · концепции бренда dev-студии</span>
+    <span>собрано вручную · без шаблонов</span>
+  </footer>
+</div>
+</body>
+</html>

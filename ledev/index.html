@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ledev — dev-студия</title>
+<meta name="description" content="ledev — dev-студия. Веб-сервисы, SaaS и сайты. Сессия открыта — присылайте задачу.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Space+Grotesk:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Space+Grotesk:wght@500;700&display=swap"></noscript>
+<style>
+:root{
+  --bg:#0B0E11; --bg2:#10151A; --line:#1E2830; --sel:#16303F;
+  --fg:#D7E0E6; --mut:#7A8A94; --dim:#4A5760;
+  --volt:#37B0FF; --green:#3ADB8A; --amber:#FFC24B; --pink:#FF6B9D;
+  --mono:'JetBrains Mono',ui-monospace,'Cascadia Code',monospace;
+  --disp:'Space Grotesk',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--mono);font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;padding-bottom:52px}
+/* scanline vignette, very subtle */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:5;
+  background:radial-gradient(140% 100% at 50% 0,transparent 60%,rgba(0,0,0,.35));}
+a{color:var(--volt);text-decoration:none}
+a:hover{text-decoration:underline}
+::selection{background:var(--sel);color:#fff}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:2px}
+
+.term{max-width:960px;margin:0 auto;padding:56px 24px 90px}
+
+/* window header */
+.winbar{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-bottom:none;
+  border-radius:10px 10px 0 0;background:var(--bg2);padding:10px 16px;position:sticky;top:0;z-index:10}
+.winbar .dots{display:flex;gap:7px}
+.winbar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line)}
+.winbar .dots i:nth-child(1){background:#E5564F}.winbar .dots i:nth-child(2){background:#F5B935}.winbar .dots i:nth-child(3){background:#4BC750}
+.winbar .title{flex:1;text-align:center;font-size:12.5px;color:var(--mut)}
+.session{border:1px solid var(--line);border-radius:0 0 10px 10px;background:var(--bg);padding:34px clamp(18px,4vw,48px) 46px}
+
+/* log structure */
+.block{margin-bottom:44px}
+.ps1{color:var(--dim);user-select:none}
+.ps1 b{color:var(--green);font-weight:500}
+.ps1 i{color:var(--volt);font-style:normal}
+.cmd{color:var(--fg);font-weight:500}
+.cmd .flag{color:var(--pink)}
+.out{margin-top:10px;padding-left:0;color:var(--mut)}
+.out .hl{color:var(--fg)}
+.comment{color:var(--dim);font-style:italic}
+
+/* typewriter */
+.type-line{display:block}
+.js .type-line[data-wait]{visibility:hidden}
+.js .type-line.typed{visibility:visible}
+.caret::after{content:"▌";color:var(--volt);animation:blink 1s steps(1) infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.js .type-line[data-wait]{visibility:visible}.caret::after{animation:none}}
+
+/* banner (figlet-style) */
+.banner{font-family:var(--disp);font-weight:700;font-size:clamp(38px,9vw,96px);line-height:.95;letter-spacing:-.03em;color:var(--fg);margin:18px 0 8px}
+.banner b{color:var(--volt);font-weight:700}
+.tagline{font-family:var(--disp);font-size:clamp(17px,2.6vw,24px);color:var(--mut);font-weight:500;max-width:34ch}
+.tagline .ok{color:var(--green)}
+
+/* ls output table */
+.ls{display:grid;grid-template-columns:auto auto 1fr;gap:4px 26px;margin-top:12px;font-size:14.5px}
+.ls .perm{color:var(--dim)}
+.ls .name{color:var(--volt);font-weight:500}
+.ls .desc{color:var(--mut)}
+.ls .name::after{content:"/"}
+@media(max-width:640px){.ls{grid-template-columns:1fr;gap:2px}.ls .perm{display:none}.ls .desc{margin-bottom:10px;padding-left:16px}}
+
+/* cat services detail */
+.svc-cat{border-left:2px solid var(--line);margin-top:14px;padding-left:20px;display:grid;gap:22px}
+.svc-cat h3{font-family:var(--disp);font-size:clamp(18px,2.4vw,23px);font-weight:700;letter-spacing:-.01em;color:var(--fg)}
+.svc-cat h3::before{content:"## ";color:var(--dim);font-family:var(--mono);font-weight:400}
+.svc-cat p{color:var(--mut);max-width:62ch;font-size:14.5px}
+.svc-cat .meta{color:var(--dim);font-size:13px}
+.svc-cat .meta b{color:var(--amber);font-weight:500}
+
+/* pipeline (process) */
+.pipe{margin-top:14px;display:grid;gap:0;counter-reset:st}
+.pipe .st{display:grid;grid-template-columns:34px 1fr;gap:14px;padding:14px 0;border-bottom:1px dashed var(--line);align-items:baseline}
+.pipe .st:last-child{border-bottom:none}
+.pipe .st::before{counter-increment:st;content:counter(st,decimal-leading-zero);color:var(--dim);font-size:13px}
+.pipe .st .do{color:var(--fg);font-weight:500}
+.pipe .st .re{color:var(--mut);font-size:14px;display:block}
+.pipe .st .re b{color:var(--green);font-weight:500}
+.status-ok{color:var(--green)}
+.status-run{color:var(--amber)}
+
+/* diff block (почему мы) */
+.diff{margin-top:12px;font-size:14.5px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.diff .dh{background:var(--bg2);padding:8px 16px;color:var(--dim);font-size:12.5px;border-bottom:1px solid var(--line)}
+.diff .l{display:block;padding:3px 16px;white-space:pre-wrap}
+.diff .del{background:rgba(229,86,79,.08);color:#D98A86}
+.diff .del::before{content:"- "}
+.diff .add{background:rgba(58,219,138,.08);color:#7ED9A9}
+.diff .add::before{content:"+ "}
+
+/* prompt CTA */
+.cta-prompt{margin-top:16px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);padding:26px clamp(18px,3vw,34px)}
+.cta-prompt .big{font-family:var(--disp);font-weight:700;font-size:clamp(24px,4.6vw,44px);letter-spacing:-.02em;line-height:1.1;margin-bottom:14px}
+.cta-prompt .big em{font-style:normal;color:var(--volt)}
+.cta-prompt p{color:var(--mut);font-size:14.5px;max-width:52ch;margin-bottom:22px}
+.cta-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;font-family:var(--mono);font-size:14px;font-weight:500;padding:12px 22px;border-radius:8px;transition:.2s;text-decoration:none!important}
+.btn-p{background:var(--volt);color:#04121C}
+.btn-p:hover{background:#5CC1FF;transform:translateY(-2px)}
+.btn-g{border:1px solid var(--line);color:var(--fg)}
+.btn-g:hover{border-color:var(--volt);color:var(--volt)}
+
+/* reveal per block */
+.blk-r{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.blk-r.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.blk-r{opacity:1;transform:none;transition:none}}
+
+/* tmux status bar */
+.tmux{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;gap:0;
+  background:var(--bg2);border-top:1px solid var(--line);font-size:12.5px;height:36px;overflow:hidden;white-space:nowrap}
+.tmux .seg{padding:0 14px;display:flex;align-items:center;height:100%;color:var(--mut)}
+.tmux .seg.hl{background:var(--volt);color:#04121C;font-weight:700}
+.tmux .seg.ok{color:var(--green)}
+.tmux .grow{flex:1}
+.tmux a{color:inherit}
+@media(max-width:560px){.tmux .hide-m{display:none}}
+</style>
+</head>
+<body>
+<main class="term">
+  <div class="winbar" aria-hidden="true">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="title">emin@ledev: ~/заказы — ssh — 96×32</div>
+  </div>
+
+  <div class="session">
+
+    <!-- login / hero -->
+    <div class="block" id="top">
+      <span class="ps1">Last login: сегодня, из Дагестана</span>
+      <div class="type-line"><span class="ps1"><b>guest</b>@<i>ledev</i>:~$ </span><span class="cmd">whoami</span></div>
+      <div class="out">
+        <div class="banner">le<b>dev</b></div>
+        <p class="tagline">dev-студия. Пишем веб-сервисы, SaaS и сайты. <span class="ok">Сессия открыта — присылайте задачу.</span></p>
+      </div>
+    </div>
+
+    <!-- services -->
+    <div class="block blk-r" id="svc">
+      <div class="type-line" data-wait><span class="ps1"><b>guest</b>@<i>ledev</i>:~$ </span><span class="cmd">ls <span class="flag">-la</span> услуги/</span></div>
+      <div class="out">
+        <div class="ls">
+          <span class="perm">drwxr-xr-x</span><span class="name">веб-сервисы</span><span class="desc">платформы, кабинеты, дашборды, биллинг</span>
+          <span class="perm">drwxr-xr-x</span><span class="name">сайты</span><span class="desc">лендинги, корпоративные, магазины — быстрые, с SEO</span>
+          <span class="perm">drwxr-xr-x</span><span class="name">интеграции</span><span class="desc">CRM, платежи, 1С, телефония, вебхуки</span>
+          <span class="perm">drwxr-xr-x</span><span class="name">поддержка</span><span class="desc">чужой код чиним, ускоряем, ведём дальше</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- cat detail -->
+    <div class="block blk-r">
+      <div class="type-line" data-wait><span class="ps1"><b>guest</b>@<i>ledev</i>:~$ </span><span class="cmd">cat услуги/веб-сервисы/README.md</span></div>
+      <div class="out">
+        <div class="svc-cat">
+          <div>
+            <h3>Веб-сервисы и SaaS</h3>
+            <p>Берём задачу целиком: архитектура, база, API, интерфейс, деплой, мониторинг. Отдаём продукт, который держит рост, а не демку для инвесторов.</p>
+            <p class="meta">stack: <b>Go · TypeScript · Vue · PostgreSQL</b> · первый релиз <b>от 4 недель</b></p>
+          </div>
+          <div>
+            <h3>Сайты, что находят в поиске</h3>
+            <p>Вёрстка без конструкторов и аренды. Грузится меньше секунды, размечен для SEO, остаётся вашим навсегда.</p>
+            <p class="meta">stack: <b>HTML · CSS · Next.js по задаче</b> · срок <b>от 2 недель</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- почему мы = diff -->
+    <div class="block blk-r">
+      <div class="type-line" data-wait><span class="ps1"><b>guest</b>@<i>ledev</i>:~$ </span><span class="cmd">git diff обычная-студия ledev</span></div>
+      <div class="out">
+        <div class="diff">
+          <div class="dh">почему-мы.md</div>
+          <span class="l del">менеджер передаёт слова менеджеру, тот — разработчику</span>
+          <span class="l add">говорите напрямую с тем, кто пишет ваш код</span>
+          <span class="l del">смета плывёт по ходу проекта</span>
+          <span class="l add">объём, срок и цена зафиксированы письменно до старта</span>
+          <span class="l del">код у подрядчика, вы — заложник</span>
+          <span class="l add">репозиторий, доступы и документация — ваши с первого дня</span>
+          <span class="l del">сдали и пропали</span>
+          <span class="l add">поддержка после релиза: мониторинг, обновления, связь</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- process = pipeline -->
+    <div class="block blk-r" id="proc">
+      <div class="type-line" data-wait><span class="ps1"><b>guest</b>@<i>ledev</i>:~$ </span><span class="cmd">make запуск <span class="flag">--watch</span></span></div>
+      <div class="out">
+        <div class="pipe">
+          <div class="st"><div><span class="do">разбор задачи</span><span class="re">созвон, цель, ограничения → смета письменно <b>[ok · 2-4 дня]</b></span></div></div>
+          <div class="st"><div><span class="do">прототип</span><span class="re">видите продукт до недель разработки <b>[ok · ~1 неделя]</b></span></div></div>
+          <div class="st"><div><span class="do">сборка спринтами</span><span class="re">каждую неделю рабочая версия с доступом <b>[ok · от 3 недель]</b></span></div></div>
+          <div class="st"><div><span class="do">релиз и поддержка</span><span class="re">продакшен, мониторинг, документация → <span class="status-run">watching…</span> не пропадаем</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- easter egg -->
+    <div class="block blk-r">
+      <div class="type-line" data-wait><span class="ps1"><b>guest</b>@<i>ledev</i>:~$ </span><span class="cmd">эй, вы кто вообще?</span></div>
+      <div class="out"><span class="comment"># я ле. работаем.</span></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="block blk-r" id="cta" style="margin-bottom:0">
+      <div class="type-line" data-wait><span class="ps1"><b>guest</b>@<i>ledev</i>:~$ </span><span class="cmd">ledev contact <span class="flag">--сейчас</span></span><span class="caret"></span></div>
+      <div class="out">
+        <div class="cta-prompt">
+          <p class="big">Опишите задачу <em>своими словами</em>.</p>
+          <p>Разберём, оценим и ответим в течение дня. Технические термины не обязательны — переведём сами. Первая консультация бесплатно.</p>
+          <div class="cta-actions">
+            <a class="btn btn-p" href="https://t.me/ledev" rel="noopener">t.me/ledev →</a>
+            <a class="btn btn-g" href="mailto:hello@ledev.ru">hello@ledev.ru</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="tmux" role="contentinfo">
+  <span class="seg hl">ledev</span>
+  <span class="seg hide-m">0:сессия*</span>
+  <span class="seg ok">● заказы открыты</span>
+  <span class="grow"></span>
+  <span class="seg hide-m"><a href="#svc">услуги</a></span>
+  <span class="seg hide-m"><a href="#proc">процесс</a></span>
+  <span class="seg"><a href="https://t.me/ledev" rel="noopener">t.me/ledev</a></span>
+  <span class="seg hide-m">© 2026</span>
+</div>
+
+<script>
+(function(){
+  document.body.classList.add('js');
+  var rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  // block reveal
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:.15,rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.blk-r').forEach(function(el){io.observe(el)});
+
+  // typewriter for command lines
+  if(!rm){
+    var tio=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting)return; tio.unobserve(e.target);
+        var line=e.target, cmd=line.querySelector('.cmd');
+        var full=cmd.innerHTML; // keep spans
+        var text=cmd.textContent;
+        cmd.textContent='';
+        line.classList.add('typed');
+        var i=0;
+        (function tick(){
+          if(i<=text.length){cmd.textContent=text.slice(0,i);i++;setTimeout(tick,26)}
+          else{cmd.innerHTML=full}
+        })();
+      });
+    },{threshold:.9});
+    document.querySelectorAll('.type-line[data-wait]').forEach(function(el){tio.observe(el)});
+  } else {
+    document.querySelectorAll('.type-line[data-wait]').forEach(function(el){el.classList.add('typed')});
+  }
+})();
+</script>
+</body>
+</html>

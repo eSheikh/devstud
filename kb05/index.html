@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КБ-05 — dev-студия</title>
+<meta name="description" content="КБ-05 — dev-студия, конструкторское бюро цифровых изделий. Веб-сервисы, SaaS, сайты — по чертежу, а не на глаз.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Russo+One&family=PT+Mono&family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Russo+One&family=PT+Mono&family=Inter:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Russo+One&family=PT+Mono&family=Inter:wght@400;500&display=swap"></noscript>
+<style>
+:root{
+  --blu:#153E66; --blu2:#12365A; --line:rgba(224,236,248,.85); --line-f:rgba(224,236,248,.28); --line-g:rgba(224,236,248,.10);
+  --tx:#E4EEF8; --mut:#9FB8CE; --acc:#FFC94A; --red:#FF6B4A;
+  --disp:'Russo One',system-ui,sans-serif; --mono:'PT Mono',monospace; --body:'Inter',system-ui,sans-serif;
+  --pad:clamp(22px,5vw,84px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--blu);color:var(--tx);font-family:var(--mono);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* миллиметровка */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+   linear-gradient(var(--line-g) 1px,transparent 1px),linear-gradient(90deg,var(--line-g) 1px,transparent 1px),
+   linear-gradient(var(--line-g) 1px,transparent 1px),linear-gradient(90deg,var(--line-g) 1px,transparent 1px);
+  background-size:80px 80px,80px 80px,16px 16px,16px 16px;opacity:.7}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--acc);color:var(--blu)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+
+/* чертёжная рамка */
+.frame{position:fixed;inset:12px;z-index:35;pointer-events:none;border:2px solid var(--line)}
+.frame::before{content:"";position:absolute;inset:5px;border:1px solid var(--line-f)}
+@media(max-width:700px){.frame{display:none}}
+
+.sheet{max-width:1120px;margin:0 auto;padding:0 var(--pad);position:relative;z-index:2}
+.stamp-l{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
+
+nav{position:fixed;top:12px;left:12px;right:12px;z-index:40;display:flex;justify-content:space-between;align-items:center;
+  padding:12px calc(var(--pad) - 12px);background:linear-gradient(var(--blu) 55%,transparent)}
+.brand{font-family:var(--disp);font-size:17px;letter-spacing:.1em;color:var(--tx)}
+.brand b{color:var(--acc);font-weight:400}
+.navl{display:flex;gap:22px;align-items:center;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.navl a{color:var(--mut)}
+.navl a:hover{color:var(--tx)}
+.navl .c{border:1.5px solid var(--acc);color:var(--acc);padding:7px 14px}
+.navl .c:hover{background:var(--acc);color:var(--blu)}
+@media(max-width:700px){nav{top:0;left:0;right:0}.navl a:not(.c){display:none}}
+
+section{padding:clamp(78px,11vh,140px) 0;position:relative;z-index:2}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ===== ЛИСТ 1: главный вид изделия ===== */
+header{min-height:100svh;display:flex;align-items:center;padding:110px 0 60px;position:relative;z-index:2}
+.gv{width:100%}
+.gv .doc-no{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:54px}
+/* изделие с размерными линиями */
+.izd{position:relative;display:inline-block;padding:clamp(24px,4vw,50px) clamp(28px,5vw,64px);border:2px solid var(--line)}
+.izd h1{font-family:var(--disp);font-weight:400;font-size:clamp(30px,6.2vw,76px);line-height:1.08;letter-spacing:.02em;text-transform:uppercase}
+.izd h1 b{color:var(--acc);font-weight:400}
+/* размерные стрелки */
+.dim-h{position:absolute;left:0;right:0;bottom:-34px;height:20px}
+.dim-h::before{content:"";position:absolute;left:0;right:0;top:9px;height:1px;background:var(--line)}
+.dim-h::after{content:"общая надёжность — 100%";position:absolute;left:50%;transform:translateX(-50%);top:-2px;background:var(--blu);padding:0 12px;font-size:10.5px;letter-spacing:.14em;color:var(--acc);text-transform:uppercase;white-space:nowrap}
+.dim-h i{position:absolute;top:4px;width:1px;height:11px;background:var(--line)}
+.dim-h i:first-child{left:0}.dim-h i:last-child{right:0}
+.dim-v{position:absolute;top:0;bottom:0;right:-30px;width:20px}
+.dim-v::before{content:"";position:absolute;top:0;bottom:0;left:9px;width:1px;background:var(--line)}
+.dim-v i{position:absolute;left:4px;width:11px;height:1px;background:var(--line)}
+.dim-v i:first-child{top:0}.dim-v i:last-child{bottom:0}
+@media(max-width:700px){.dim-v{display:none}}
+.gv .legend{margin-top:76px;max-width:56ch;font-family:var(--body);font-size:15.5px;color:var(--mut);line-height:1.7}
+.gv .legend b{color:var(--tx);font-weight:500}
+.gv .acts{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+.kbtn{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:13px 24px;transition:.2s}
+.kbtn-p{background:var(--acc);color:var(--blu);font-weight:700}
+.kbtn-p:hover{background:#FFD97E;transform:translateY(-2px)}
+.kbtn-g{border:1.5px solid var(--line-f);color:var(--tx)}
+.kbtn-g:hover{border-color:var(--acc);color:var(--acc)}
+
+.sec-t{margin-bottom:50px;display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.sec-t h2{font-family:var(--disp);font-weight:400;font-size:clamp(20px,3.4vw,34px);letter-spacing:.06em;text-transform:uppercase}
+.sec-t h2 b{color:var(--acc);font-weight:400}
+
+/* ===== СПЕЦИФИКАЦИЯ (услуги) ===== */
+.spec{border:1.5px solid var(--line);background:rgba(12,40,66,.5)}
+.spec .r{display:grid;grid-template-columns:70px 190px 1fr 120px;border-bottom:1px solid var(--line-f)}
+.spec .r:last-child{border-bottom:none}
+.spec .r>*{padding:16px 18px;border-right:1px solid var(--line-f)}
+.spec .r>*:last-child{border-right:none}
+.spec .hd{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);background:rgba(224,236,248,.05)}
+.spec .hd>*{padding:10px 18px}
+.spec .poz{color:var(--acc)}
+.spec .obz{color:var(--mut);font-size:12.5px}
+.spec .nam{font-family:var(--body)}
+.spec .nam b{display:block;font-weight:500;font-size:16px;margin-bottom:3px}
+.spec .nam span{color:var(--mut);font-size:13.5px}
+.spec .kol{color:var(--mut);font-size:12.5px}
+@media(max-width:780px){.spec .r{grid-template-columns:52px 1fr}.spec .obz,.spec .kol{display:none}}
+
+/* ===== выноски (почему мы) ===== */
+.vyn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;border:1.5px solid var(--line)}
+.vyn>div{padding:26px 26px 30px;border:1px solid var(--line-f);position:relative}
+.vyn .vn{position:absolute;top:-13px;left:22px;width:26px;height:26px;border:1.5px solid var(--acc);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--acc);background:var(--blu)}
+.vyn h3{font-family:var(--body);font-weight:500;font-size:16.5px;margin:8px 0 8px}
+.vyn p{font-family:var(--body);color:var(--mut);font-size:13.5px;line-height:1.6}
+
+/* ===== МАРШРУТНАЯ КАРТА (процесс) ===== */
+.route{border:1.5px solid var(--line)}
+.route .rr{display:grid;grid-template-columns:90px 1fr 150px;border-bottom:1px solid var(--line-f);align-items:center}
+.route .rr:last-child{border-bottom:none}
+.route .rr>*{padding:18px}
+.route .op{color:var(--acc);font-size:13px}
+.route .nm{font-family:var(--body)}
+.route .nm b{font-weight:500;font-size:16px;display:block;margin-bottom:2px}
+.route .nm span{color:var(--mut);font-size:13.5px}
+.route .tm{color:var(--mut);font-size:12px;text-align:right}
+.route .rr.active .op::after{content:" ▸";color:var(--red)}
+@media(max-width:640px){.route .rr{grid-template-columns:70px 1fr}.route .tm{display:none}}
+.gost-note{margin-top:18px;font-size:11px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase}
+
+/* ===== ТЗ / CTA ===== */
+.tz{border:2px solid var(--line);position:relative;padding:clamp(34px,6vw,64px);background:rgba(12,40,66,.5)}
+.tz .approved{position:absolute;top:26px;right:26px;border:2.5px solid var(--red);color:var(--red);
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;padding:10px 18px;transform:rotate(9deg)}
+.tz h2{font-family:var(--disp);font-weight:400;font-size:clamp(24px,4.6vw,46px);letter-spacing:.04em;text-transform:uppercase;line-height:1.15;max-width:16ch}
+.tz h2 b{color:var(--acc);font-weight:400}
+.tz p{font-family:var(--body);color:var(--mut);max-width:50ch;margin:20px 0 30px;font-size:15.5px}
+@media(max-width:640px){.tz .approved{position:static;display:inline-block;margin-bottom:22px}}
+
+/* ===== штамп (футер) ===== */
+.stamp{border:2px solid var(--line);display:grid;grid-template-columns:1fr 1fr 1fr;margin-bottom:40px}
+.stamp>div{padding:10px 16px;border-right:1px solid var(--line-f);border-bottom:1px solid var(--line-f);font-size:11.5px}
+.stamp .k{color:var(--mut);font-size:10px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:2px}
+.stamp .big{font-family:var(--disp);font-size:16px;letter-spacing:.1em}
+.stamp .big b{color:var(--acc);font-weight:400}
+footer{padding:60px 0 70px;position:relative;z-index:2}
+.f-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
+.f-meta a:hover{color:var(--acc)}
+</style>
+</head>
+<body>
+
+<div class="frame" aria-hidden="true"></div>
+
+<nav>
+  <a class="brand" href="#top">КБ<b>—05</b></a>
+  <div class="navl">
+    <a href="#spec">спецификация</a>
+    <a href="#route">маршрут</a>
+    <a class="c" href="#tz">подать ТЗ</a>
+  </div>
+</nav>
+
+<header id="top">
+  <div class="sheet gv">
+    <div class="doc-no">
+      <span class="stamp-l">лист 1 · главный вид</span>
+      <span class="stamp-l">КБ-05.2026.001 · масштаб 1:1</span>
+    </div>
+    <div class="izd reveal in">
+      <h1>Изделие:<br>ваш <b>цифровой</b><br>продукт</h1>
+      <div class="dim-h" aria-hidden="true"><i></i><i></i></div>
+      <div class="dim-v" aria-hidden="true"><i></i><i></i></div>
+    </div>
+    <p class="legend reveal in">КБ-05 — конструкторское бюро цифровых изделий, dev-студия из Дагестана <b>(05 — наш регион)</b>. Веб-сервисы, SaaS и сайты проектируем по чертежу, а не на глаз: <b>размеры зафиксированы, допуски оговорены, срок — в штампе.</b></p>
+    <div class="acts reveal in">
+      <a class="kbtn kbtn-p" href="#tz">Подать ТЗ →</a>
+      <a class="kbtn kbtn-g" href="#spec">Спецификация</a>
+    </div>
+  </div>
+</header>
+
+<section id="spec">
+  <div class="sheet">
+    <div class="sec-t reveal"><h2>Спецификация <b>работ</b></h2><span class="stamp-l">лист 2</span></div>
+    <div class="spec reveal">
+      <div class="r hd"><span>Поз.</span><span>Обозначение</span><span>Наименование</span><span>Срок</span></div>
+      <div class="r"><span class="poz">1</span><span class="obz">КБ-05.СРВ</span><div class="nam"><b>Веб-сервисы и SaaS</b><span>платформы, кабинеты, дашборды, биллинг, интеграции</span></div><span class="kol">от 4 нед</span></div>
+      <div class="r"><span class="poz">2</span><span class="obz">КБ-05.САЙТ</span><div class="nam"><b>Сайты и лендинги</b><span>быстрые, с SEO, без аренды конструктора</span></div><span class="kol">от 2 нед</span></div>
+      <div class="r"><span class="poz">3</span><span class="obz">КБ-05.API</span><div class="nam"><b>API и интеграции</b><span>оплаты, CRM, 1С, мессенджеры — стабильно и документированно</span></div><span class="kol">по ТЗ</span></div>
+      <div class="r"><span class="poz">4</span><span class="obz">КБ-05.СОПР</span><div class="nam"><b>Поддержка и развитие</b><span>чужой код чиним, ускоряем, ведём; мониторинг и инциденты</span></div><span class="kol">бессрочно</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sheet">
+    <div class="sec-t reveal"><h2>Технические <b>требования</b></h2><span class="stamp-l">лист 3 · обязательны</span></div>
+    <div class="vyn reveal">
+      <div><span class="vn">1</span><h3>Смета — до начала работ</h3><p>Объём, срок и цена в договоре. Изменения — только через согласование, не счётом задним числом.</p></div>
+      <div><span class="vn">2</span><h3>Демо каждую неделю</h3><p>Рабочая версия с доступом — еженедельно. Продукт виден в процессе, а не «сюрпризом» при сдаче.</p></div>
+      <div><span class="vn">3</span><h3>Код — собственность заказчика</h3><p>Репозиторий, доступы, документация передаются с первого дня.</p></div>
+      <div><span class="vn">4</span><h3>Сопровождение после выпуска</h3><p>Мониторинг, обновления, реакция на инциденты — изделие не остаётся без конструктора.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="route">
+  <div class="sheet">
+    <div class="sec-t reveal"><h2>Маршрутная <b>карта</b></h2><span class="stamp-l">лист 4 · тех. процесс</span></div>
+    <div class="route reveal">
+      <div class="rr"><span class="op">Оп. 005</span><div class="nm"><b>Разбор задачи</b><span>созвон, цель, ограничения; фиксация сметы</span></div><span class="tm">2–4 дня</span></div>
+      <div class="rr"><span class="op">Оп. 010</span><div class="nm"><b>Эскизный проект</b><span>прототип: изделие видно до начала производства</span></div><span class="tm">~1 неделя</span></div>
+      <div class="rr"><span class="op">Оп. 015</span><div class="nm"><b>Производство</b><span>сборка спринтами, демо еженедельно, правки по ходу</span></div><span class="tm">от 3 недель</span></div>
+      <div class="rr active"><span class="op">Оп. 020</span><div class="nm"><b>Выпуск и сопровождение</b><span>продакшен, мониторинг, документация</span></div><span class="tm">далее — всегда</span></div>
+    </div>
+    <p class="gost-note reveal">нумерация операций — как в маршрутных картах: с шагом 5, чтобы было куда вставить ваши правки</p>
+  </div>
+</section>
+
+<section id="tz">
+  <div class="sheet">
+    <div class="tz reveal">
+      <span class="approved">принимаем</span>
+      <h2>Техническое задание — <b>своими словами</b></h2>
+      <p>Чертить не нужно — присылайте задачу как есть. Разберём, оценим, ответим в течение дня и вернём вам нормальный план работ. Первая консультация бесплатно.</p>
+      <div class="acts">
+        <a class="kbtn kbtn-p" href="https://t.me/kb05dev" rel="noopener">t.me/kb05dev →</a>
+        <a class="kbtn kbtn-g" href="mailto:hello@kb05.ru">hello@kb05.ru</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="sheet">
+    <div class="stamp reveal" aria-label="Штамп чертежа">
+      <div><span class="k">Разраб.</span>КБ-05</div>
+      <div><span class="k">Пров.</span>заказчик</div>
+      <div><span class="k">Утв.</span>продакшен</div>
+      <div><span class="k">Изделие</span>ваш продукт</div>
+      <div class="big" style="grid-column:span 2"><span class="k">Бюро</span>КБ<b>—05</b> · dev-студия</div>
+      <div><span class="k">Лит.</span>Р</div>
+      <div><span class="k">Лист</span>1</div>
+      <div><span class="k">Листов</span>∞</div>
+    </div>
+    <div class="f-meta">
+      <span>© 2026 КБ-05 · дагестан, регион 05</span>
+      <a href="https://t.me/kb05dev" rel="noopener">telegram</a>
+      <span>начерчено, не нарисовано</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:.13,rootMargin:'0px 0px -7% 0px'});
+  document.querySelectorAll('.reveal:not(.in)').forEach(function(el){io.observe(el)});
+})();
+</script>
+</body>
+</html>
