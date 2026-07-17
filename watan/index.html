@@ -28,7 +28,7 @@ a{color:inherit;text-decoration:none}
 
 /* ============ КАРТА — фон всей страницы ============ */
 .mapbg{position:fixed;inset:0;z-index:0;overflow:hidden;background:linear-gradient(120deg,var(--paper) 0%,#EFF2EC 100%)}
-.mapcam{position:absolute;right:2vw;top:50%;transform:translateY(-50%);height:min(94vh,118vw);aspect-ratio:1150/1550;
+.mapcam{position:absolute;right:2vw;top:50%;transform:translateY(-50%);height:min(94svh,118vw);aspect-ratio:1150/1550;
   transition:transform 1.6s cubic-bezier(.3,.7,.25,1);will-change:transform}
 .mapcam svg{width:100%;height:100%;opacity:.92;overflow:visible}
 /* фокус камеры по секциям */
@@ -45,6 +45,8 @@ a{color:inherit;text-decoration:none}
   .mapbg.f-coast .mapcam{transform:translate(50%,-50%) scale(1.55) translate(-8%,3%)}
   .mapbg.f-mount .mapcam{transform:translate(50%,-50%) scale(1.6) translate(5%,-13%)}
   .mapbg.f-south .mapcam{transform:translate(50%,-50%) scale(1.5) translate(-7%,-31%)}
+  /* мобильные GPU: SVG-фильтры внутри clip-path + scale дают артефакты и дорогой растр */
+  .land,.hyp,.rsh,.rlt{filter:none}
 }
 
 /* картографические элементы */
@@ -95,8 +97,12 @@ section{min-height:96svh;display:flex;flex-direction:column;justify-content:cent
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 
-.plate{background:rgba(255,255,255,.72);backdrop-filter:blur(10px);border:1px solid rgba(34,53,44,.1);
+.plate{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(34,53,44,.1);
   border-radius:18px;padding:clamp(28px,4vw,46px);box-shadow:0 24px 60px -30px rgba(34,53,44,.25)}
+@media(max-width:900px){
+  /* blur поверх анимируемого fixed-фона слишком дорог на телефоне — плотнее фон, без blur */
+  .plate{background:rgba(255,255,255,.92);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
 .geo{display:flex;align-items:center;gap:10px;margin-bottom:20px}
 .geo i{width:9px;height:9px;border-radius:50%;background:var(--pin);flex:none}
 h1{font-family:var(--serif);font-weight:300;font-size:clamp(42px,7vw,84px);line-height:1;letter-spacing:-.02em}
