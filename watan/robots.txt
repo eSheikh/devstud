@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vatan.dev/sitemap.xml
+Sitemap: https://vatandev.com/sitemap.xml
